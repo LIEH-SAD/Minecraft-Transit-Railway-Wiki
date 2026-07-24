@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>赞助支持 - Wiki</title>
+    <link rel="stylesheet" href="css/wiki.css?v=7">
+</head>
+<body>
+    <div id="app">
+        <!-- 顶部应用栏 -->
+        <header id="app-bar" class="md-app-bar">
+            <a href="#/" class="md-app-bar__title" id="app-title" onclick="location.href='index.html'">Wiki</a>
+            <div class="md-app-bar__spacer"></div>
+            <a href="index.html" class="md-icon-btn" title="返回 Wiki" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </a>
+        </header>
+
+        <div id="layout" class="md-layout">
+            <main id="content" class="md-content" style="margin-left:0;max-width:720px;margin-right:auto;">
+                <article class="md-content__body active">
+                    <h1>赞助支持</h1>
+                    <p>如果你喜欢这个 Wiki 项目，欢迎通过爱发电平台赞助支持！</p>
+                    <hr>
+
+                    <h2>爱发电赞助</h2>
+                    <p>爱发电是一个支持创作者的内容赞助平台。感谢你的支持！</p>
+
+                    <div class="md-sponsor-card">
+                        <iframe src="https://ifdian.net/leaflet?slug=sadliehbilibili" width="100%" scrolling="no" height="200" frameborder="0" style="max-width:640px;"></iframe>
+                    </div>
+
+                    <h2>赞助者名单</h2>
+                    <div id="sponsor-list" class="md-sponsor-grid">
+                        <div class="md-sponsor-loading">加载中...</div>
+                    </div>
+
+                    <h2>赞助说明</h2>
+                    <ul>
+                        <li>赞助是完全自愿的</li>
+                        <li>赞助者不会获得任何特殊权限</li>
+                        <li>所有赞助将用于项目开发和服务器维护</li>
+                        <li>如有任何问题，请通过项目仓库联系我们</li>
+                    </ul>
+                    <hr>
+                    <p><em>感谢每一位支持者！</em></p>
+                </article>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/wiki-theme.js?v=7"></script>
+    <script>
+    (async function() {
+        const container = document.getElementById('sponsor-list');
+        try {
+            const resp = await fetch('content/sponsors.json?v=' + Date.now());
+            const result = await resp.json();
+            if (!result || !result.list || result.list.length === 0) {
+                container.innerHTML = '<p class="md-sponsor-empty">暂无赞助记录</p>';
+                return;
+            }
+            const list = result.list;
+            container.innerHTML = list.map(item => {
+                const user = item.user || {};
+                const name = user.name || '\u533F\u540D';
+                const avatar = user.avatar || '';
+                const amount = parseFloat(item.all_sum_amount || 0).toFixed(2);
+                const avatarHtml = avatar
+                    ? `<img class="md-sponsor-avatar" src="${avatar}" alt="${name}" loading="lazy">`
+                    : `<div class="md-sponsor-avatar md-sponsor-avatar--placeholder">${name.charAt(0)}</div>`;
+                return `
+                    <div class="md-sponsor-item">
+                        ${avatarHtml}
+                        <div class="md-sponsor-info">
+                            <span class="md-sponsor-name">${name}</span>
+                            <span class="md-sponsor-amount">${amount} \u5143</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } catch (e) {
+            container.innerHTML = '<p class="md-sponsor-empty">\u52A0\u8F7D\u8D5E\u52A9\u6570\u636E\u5931\u8D25</p>';
+        }
+    })();
+    </script>
+</body>
+</html>

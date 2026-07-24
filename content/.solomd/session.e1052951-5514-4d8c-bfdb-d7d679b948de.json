@@ -1,0 +1,29 @@
+{
+  "device_id": "e1052951-5514-4d8c-bfdb-d7d679b948de",
+  "device_label": "Windows",
+  "saved_at": 1784900349,
+  "active_index": 2,
+  "tabs": [
+    {
+      "file_path": "D:\\wiki\\content\\about.md",
+      "file_name": "about.md",
+      "cursor_line": null,
+      "cursor_col": null,
+      "rel_path": "about.md"
+    },
+    {
+      "file_path": "D:\\wiki\\content\\index.md",
+      "file_name": "index.md",
+      "cursor_line": null,
+      "cursor_col": null,
+      "rel_path": "index.md"
+    },
+    {
+      "file_path": "D:\\wiki\\content\\install.md",
+      "file_name": "install.md",
+      "cursor_line": null,
+      "cursor_col": null,
+      "rel_path": "install.md"
+    }
+  ]
+}

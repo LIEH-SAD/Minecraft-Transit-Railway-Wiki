@@ -1,0 +1,4 @@
+[
+    { "path": "index",           "title": "首页",              "section": "pages" },
+    { "path": "install",         "title": "1、安装模组",       "section": "pages" }
+]
