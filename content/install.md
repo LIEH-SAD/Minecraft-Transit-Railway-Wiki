@@ -25,6 +25,7 @@
 |  创世神 (WorldEdit) | https://modrinth.com/plugin/worldedit | https://www.curseforge.com/minecraft/mc-mods/worldedit |
 |  模组菜单 (Mod Menu) | https://modrinth.com/mod/modmenu | https://www.curseforge.com/minecraft/mc-mods/modmenu |
 |  轻松建造 (Effortless Building) | https://modrinth.com/mod/effortless-building | https://www.curseforge.com/minecraft/mc-mods/effortless-building |
+
 选择对应的版本和加载器后，把它们拖入到安装目录的mods文件夹，然后打开游戏，不出意外的化，你可以游玩它们了。
 
 ## 接下来：创建第一条线路
