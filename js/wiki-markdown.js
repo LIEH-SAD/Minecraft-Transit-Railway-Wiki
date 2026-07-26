@@ -152,16 +152,27 @@ class WikiMarkdown {
             return `<div class="md-table-wrapper"><table><thead>${header}</thead><tbody>${body}</tbody></table></div>`;
         };
 
-        // 代码块: highlight.js 高亮
+        // 代码块: AI 风格 — 语言标签 + 复制按钮 + 高亮
         renderer.code = function (code, language) {
+            const lang = language || 'text';
+            const langLabel = escapeHtml(lang);
+            const escaped = escapeHtml(code);
+            let highlighted = escaped;
             if (typeof hljs !== 'undefined' && language && hljs.getLanguage(language)) {
                 try {
-                    const v = hljs.highlight(code, { language, ignoreIllegals: true }).value;
-                    return `<pre><code class="hljs language-${language}">${v}</code></pre>`;
+                    highlighted = hljs.highlight(code, { language, ignoreIllegals: true }).value;
                 } catch (e) { /* fallthrough */ }
             }
-            const cls = language ? ` class="language-${language}"` : '';
-            return `<pre><code${cls}>${escapeHtml(code)}</code></pre>`;
+            return `<div class="md-code-block">
+                <div class="md-code-block__header">
+                    <span class="md-code-block__lang">${langLabel}</span>
+                    <button class="md-code-block__copy" onclick="WikiMarkdown.copyCode(this)" title="复制代码">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <span class="md-code-block__copy-tip">已复制</span>
+                    </button>
+                </div>
+                <pre class="md-code-block__body"><code class="hljs language-${langLabel}">${highlighted}</code></pre>
+            </div>`;
         };
 
         marked.use({ renderer });
@@ -221,6 +232,33 @@ class WikiMarkdown {
         while (stack.length > 0) { html += '</ul>'; stack.pop(); }
         html += '</details>';
         return html;
+    }
+
+    /**
+     * 复制代码 (静态方法, 由 onclick 调用)
+     * @param {HTMLElement} btn - 复制按钮
+     */
+    static copyCode(btn) {
+        const block = btn.closest('.md-code-block');
+        const code = block.querySelector('code').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            const tip = btn.querySelector('.md-code-block__copy-tip');
+            tip.classList.add('show');
+            setTimeout(() => tip.classList.remove('show'), 1500);
+        }).catch(() => {
+            // fallback
+            const ta = document.createElement('textarea');
+            ta.value = code;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            const tip = btn.querySelector('.md-code-block__copy-tip');
+            tip.classList.add('show');
+            setTimeout(() => tip.classList.remove('show'), 1500);
+        });
     }
 }
 

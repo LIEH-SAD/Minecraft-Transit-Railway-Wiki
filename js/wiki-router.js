@@ -121,6 +121,18 @@ class WikiRouter {
     }
 
     /**
+     * 获取分类徽章 HTML
+     */
+    getCategoryBadge(path) {
+        const pages = wikiApp ? wikiApp.pages : [];
+        const page = pages.find(p => p.path === path);
+        if (!page || !page.category) return '';
+
+        const catInfo = wikiApp.getCategoryInfo(page.category);
+        return `<div class="md-category-badge"><span class="md-tag md-tag--${page.category}">${catInfo.icon} ${catInfo.label}</span></div>`;
+    }
+
+    /**
      * 渲染页面
      */
     async renderPage(markdownText, path) {
@@ -130,8 +142,9 @@ class WikiRouter {
         // 等待 Markdown 渲染器就绪
         const { html, toc } = await wikiMarkdown.render(markdownText);
 
-        // 组合 HTML: 目录 + 内容
-        const fullHtml = toc + html;
+        // 分类徽章 + 目录 + 内容
+        const badge = this.getCategoryBadge(path);
+        const fullHtml = badge + toc + html;
 
         // 使用 DOM 操作更新 (比 innerHTML 更高效)
         contentBody.innerHTML = fullHtml;

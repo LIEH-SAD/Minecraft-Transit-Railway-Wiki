@@ -12,6 +12,7 @@
 class WikiApp {
     constructor() {
         this.pages = [];           // 所有页面列表
+        this.groups = [];          // 分组配置 (从 groups.json 加载)
         this.searchIndex = [];     // 搜索索引
         this.initPromise = null;
     }
@@ -25,10 +26,13 @@ class WikiApp {
         // 1. 初始化路由
         wikiRouter.init();
 
-        // 2. 扫描所有页面
+        // 2. 加载分组配置
+        await this.loadGroups();
+
+        // 3. 扫描所有页面
         await this.scanPages();
 
-        // 3. 构建导航
+        // 4. 构建导航
         this.buildNavigation();
 
         // 4. 初始化搜索
@@ -77,30 +81,91 @@ class WikiApp {
     }
 
     /**
-     * 构建侧边栏导航
+     * 从 content/groups.json 加载分组配置
+     */
+    async loadGroups() {
+        try {
+            const response = await fetch('content/groups.json');
+            if (response.ok) {
+                this.groups = await response.json();
+                console.log(`[WikiApp] 从 groups.json 加载了 ${this.groups.length} 个分组`);
+                return;
+            }
+            throw new Error('groups.json 加载失败');
+        } catch (e) {
+            console.warn('[WikiApp] 无法加载 groups.json:', e.message);
+            this.groups = [];
+        }
+    }
+
+    /**
+     * 获取分组信息，若未定义则归为"其他"
+     */
+    getCategoryInfo(category) {
+        const found = this.groups.find(g => g.key === category);
+        return found || { key: 'other', label: '其他', icon: '📄' };
+    }
+
+    /**
+     * 构建侧边栏导航 (按分类分组)
      */
     buildNavigation() {
         const navList = document.getElementById('nav-list');
         const pageList = document.getElementById('page-list');
         if (!navList || !pageList) return;
 
-        // 按分组归类
-        const guidePages = this.pages.filter(p => p.section === 'guide');
-        const otherPages = this.pages.filter(p => p.section !== 'guide');
-
-        // 渲染主导航 (指南分组)
-        if (guidePages.length > 0) {
-            navList.innerHTML = guidePages.map(p => `
-                <li><a href="#/${p.path}">${p.title}</a></li>
-            `).join('');
+        // 按 category 分组 (使用 groups.json 定义的顺序)
+        const groups = new Map();
+        for (const page of this.pages) {
+            const cat = page.category || 'other';
+            if (!groups.has(cat)) groups.set(cat, []);
+            groups.get(cat).push(page);
         }
 
-        // 渲染页面列表
-        if (otherPages.length > 0) {
-            pageList.innerHTML = otherPages.map(p => `
-                <li><a href="#/${p.path}">${p.title}</a></li>
-            `).join('');
+        // 按 groups.json 中的数组顺序排列
+        const processedKeys = new Set();
+        const sortedGroups = [];
+        for (const groupDef of this.groups) {
+            if (groups.has(groupDef.key)) {
+                sortedGroups.push([groupDef.key, groups.get(groupDef.key)]);
+                processedKeys.add(groupDef.key);
+            }
         }
+        // 未在 groups.json 中定义的按字母序追加
+        for (const [key, pages] of groups) {
+            if (!processedKeys.has(key)) {
+                sortedGroups.push([key, pages]);
+            }
+        }
+
+        // 生成导航 HTML
+        let navHtml = '';
+        let pageHtml = '';
+        for (const [catKey, catPages] of sortedGroups) {
+            const catInfo = this.getCategoryInfo(catKey);
+            const isHome = catInfo.isHome === true;
+            const sectionClass = isHome ? 'md-drawer__section' : 'md-drawer__section md-drawer__section--category';
+
+            // 首页单独渲染到 nav-list
+            if (isHome) {
+                navHtml += catPages.map(p => `
+                    <li><a href="#/${p.path}">${catInfo.icon} ${p.title}</a></li>
+                `).join('');
+            } else {
+                pageHtml += `
+                    <div class="${sectionClass}">
+                        <span class="md-drawer__section-title">${catInfo.icon} ${catInfo.label}</span>
+                        <ul class="md-nav-list">
+                            ${catPages.map(p => `
+                                <li><a href="#/${p.path}">${p.title}</a></li>
+                            `).join('')}
+                        </ul>
+                    </div>`;
+            }
+        }
+
+        navList.innerHTML = navHtml;
+        pageList.innerHTML = pageHtml || '<div class="md-drawer__section"><span class="md-drawer__section-title">📄 页面</span></div>';
 
         // 更新底部计数
         const pageCount = document.getElementById('page-count');

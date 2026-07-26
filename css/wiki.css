@@ -594,7 +594,7 @@ img {
     margin-bottom: 0;
 }
 
-/* ---------- 代码 ---------- */
+/* ---------- 行内代码 ---------- */
 .md-content__body code {
     font-family: var(--md-font-mono);
     font-size: 0.875em;
@@ -604,22 +604,110 @@ img {
     color: var(--md-code-text);
 }
 
-.md-content__body pre {
-    margin: 1em 0;
-    padding: var(--md-space-md);
-    background: var(--md-code-bg);
-    border-radius: var(--md-radius-md);
-    overflow-x: auto;
-    font-size: 0.875rem;
-    line-height: 1.5;
+/* ---------- 代码块 (AI 风格) ---------- */
+.md-code-block {
+    margin: 1.25em 0;
+    border-radius: var(--md-radius-lg);
+    overflow: hidden;
     border: 1px solid var(--md-card-border);
+    background: var(--md-code-bg);
+    box-shadow: var(--md-elevation-1);
+    transition: box-shadow var(--md-transition-fast);
+}
+.md-code-block:hover {
+    box-shadow: var(--md-elevation-2);
 }
 
-.md-content__body pre code {
+/* 代码块头部: 语言标签 + 复制按钮 */
+.md-code-block__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--md-space-xs) var(--md-space-md);
+    background: color-mix(in srgb, var(--md-card-border) 40%, var(--md-surface));
+    border-bottom: 1px solid var(--md-card-border);
+    user-select: none;
+}
+
+.md-code-block__lang {
+    font-family: var(--md-font-mono);
+    font-size: 0.75rem;
+    font-weight: var(--md-font-weight-medium);
+    color: var(--md-text-secondary);
+    text-transform: lowercase;
+    letter-spacing: 0.03em;
+}
+
+.md-code-block__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border: none;
+    border-radius: var(--md-radius-sm);
+    background: transparent;
+    color: var(--md-text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.75rem;
+    position: relative;
+    transition: background var(--md-transition-fast), color var(--md-transition-fast);
+}
+.md-code-block__copy:hover {
+    background: var(--md-primary-bg);
+    color: var(--md-primary);
+}
+.md-code-block__copy:active {
+    background: color-mix(in srgb, var(--md-primary) 24%, transparent);
+}
+
+/* 复制成功提示 */
+.md-code-block__copy-tip {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background: var(--md-text-primary);
+    color: var(--md-surface);
+    font-size: 0.6875rem;
+    padding: 2px 8px;
+    border-radius: var(--md-radius-sm);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--md-transition-fast), transform var(--md-transition-fast);
+}
+.md-code-block__copy-tip.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+/* 代码块内容区 */
+.md-code-block__body {
+    margin: 0;
+    padding: var(--md-space-md);
+    background: var(--md-code-bg);
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    border: none;
+    border-radius: 0;
+}
+
+.md-code-block__body code {
     padding: 0;
     background: none;
     font-size: inherit;
     color: inherit;
+    font-family: var(--md-font-mono);
+}
+
+/* 深色模式微调 */
+[data-theme="dark"] .md-code-block {
+    --md-code-bg: color-mix(in srgb, CanvasText 8%, Canvas);
+}
+[data-theme="dark"] .md-code-block__header {
+    background: color-mix(in srgb, CanvasText 10%, Canvas);
 }
 
 /* ---------- 水平线 ---------- */
@@ -760,6 +848,48 @@ img {
     background: var(--md-primary-bg);
     border-radius: var(--md-radius-full);
     margin: 2px 4px 2px 0;
+}
+
+/* 分类标签颜色变体 */
+.md-tag--home {
+    color: #FF9800;
+    background: color-mix(in srgb, #FF9800 14%, transparent);
+}
+.md-tag--guide {
+    color: #2196F3;
+    background: color-mix(in srgb, #2196F3 14%, transparent);
+}
+.md-tag--addon {
+    color: #9C27B0;
+    background: color-mix(in srgb, #9C27B0 14%, transparent);
+}
+
+/* ============================================================
+   分类徽章 (文章顶部)
+   ============================================================ */
+.md-category-badge {
+    margin-bottom: var(--md-space-md);
+    display: flex;
+    align-items: center;
+}
+.md-category-badge .md-tag {
+    font-size: 0.8125rem;
+    padding: 4px 12px;
+    letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   侧边栏分类分组
+   ============================================================ */
+.md-drawer__section--category {
+    margin-top: var(--md-space-xs);
+}
+.md-drawer__section--category .md-drawer__section-title {
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+    padding: var(--md-space-sm) var(--md-space-lg) var(--md-space-xs);
+    color: var(--md-text-secondary);
+    opacity: 0.85;
 }
 
 /* ============================================================
