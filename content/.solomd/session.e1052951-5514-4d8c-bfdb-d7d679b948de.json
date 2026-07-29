@@ -1,8 +1,8 @@
 {
   "device_id": "e1052951-5514-4d8c-bfdb-d7d679b948de",
   "device_label": "Windows",
-  "saved_at": 1785056595,
-  "active_index": 0,
+  "saved_at": 1785287628,
+  "active_index": 3,
   "tabs": [
     {
       "file_path": null,
@@ -10,6 +10,27 @@
       "cursor_line": null,
       "cursor_col": null,
       "rel_path": null
+    },
+    {
+      "file_path": "D:\\VH\\Minecraft-Transit-Railway-Wiki\\content\\resourcepack2.md",
+      "file_name": "resourcepack2.md",
+      "cursor_line": null,
+      "cursor_col": null,
+      "rel_path": "resourcepack2.md"
+    },
+    {
+      "file_path": "D:\\VH\\Minecraft-Transit-Railway-Wiki\\content\\ai.md",
+      "file_name": "ai.md",
+      "cursor_line": null,
+      "cursor_col": null,
+      "rel_path": "ai.md"
+    },
+    {
+      "file_path": "D:\\VH\\Minecraft-Transit-Railway-Wiki\\content\\help.md",
+      "file_name": "help.md",
+      "cursor_line": null,
+      "cursor_col": null,
+      "rel_path": "help.md"
     }
   ]
 }

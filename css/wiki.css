@@ -479,17 +479,153 @@ img {
     display: flex;
 }
 
-.md-loader__spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--md-primary-bg);
-    border-top-color: var(--md-primary);
-    border-radius: 50%;
-    animation: md-spin 0.8s linear infinite;
+/* ---- 牛顿摆 (动量守恒小球) ---- */
+.md-loader__cradle {
+    position: relative;
+    width: 130px;
+    height: 80px;
+    margin: 0 auto;
 }
 
-@keyframes md-spin {
-    to { transform: rotate(360deg); }
+/* 顶部横梁 */
+.cradle__top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--md-primary);
+    border-radius: 2px;
+    opacity: 0.5;
+}
+
+/* 每个摆 */
+.cradle__pendulum {
+    position: absolute;
+    top: 0;
+    left: calc(2px + var(--i) * 26px);
+    width: 20px;
+    height: 100%;
+    transform-origin: center 3px;
+    will-change: transform;
+}
+
+/* 摆绳 */
+.cradle__string {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    width: 1.5px;
+    height: 54px;
+    background: var(--md-primary);
+    transform: translateX(-50%);
+    border-radius: 1px;
+    opacity: 0.4;
+}
+
+/* 小球 */
+.cradle__ball {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    background: var(--md-primary);
+    border-radius: 50%;
+}
+
+/* ---- 摆锤动画 (2.4s 完整周期) ---- */
+
+/* 左球: 撞向前再被弹回 */
+.cradle__pendulum[style*="--i:0"] {
+    animation: cradle-swing-left 2.4s ease-in-out infinite;
+}
+
+/* 右球: 被撞击后摆出再回来 */
+.cradle__pendulum[style*="--i:4"] {
+    animation: cradle-swing-right 2.4s ease-in-out infinite;
+}
+
+/* 中间偏左: 轻微受击抖动 */
+.cradle__pendulum[style*="--i:1"] {
+    animation: cradle-wobble-1 2.4s ease-in-out infinite;
+}
+
+/* 中间: 几乎静止 */
+.cradle__pendulum[style*="--i:2"] .cradle__ball {
+    animation: cradle-pulse 2.4s ease-in-out infinite;
+}
+
+/* 中间偏右: 轻微受击抖动 */
+.cradle__pendulum[style*="--i:3"] {
+    animation: cradle-wobble-3 2.4s ease-in-out infinite;
+}
+
+/* ---- 关键帧 ---- */
+
+@keyframes cradle-swing-left {
+    /* 左球从左侧摆向中心撞击 */
+    0%, 100% { transform: rotate(-32deg); }
+    5% { transform: rotate(-32deg); }
+    16% { transform: rotate(0deg); }     /* 撞到中点 */
+    22% { transform: rotate(0deg); }     /* 动量已传递 */
+
+    /* 右球摆出期间在此静止 */
+    22%, 66% { transform: rotate(0deg); }
+
+    /* 右球撞回, 左球被弹回左侧 */
+    72% { transform: rotate(0deg); }     /* 被撞瞬间 */
+    78% { transform: rotate(0deg); }
+    95% { transform: rotate(-32deg); }   /* 弹回左侧 */
+}
+
+@keyframes cradle-swing-right {
+    /* 左球撞击期间右球静止 */
+    0%, 16% { transform: rotate(0deg); }
+    22% { transform: rotate(0deg); }     /* 被撞击瞬间 */
+
+    /* 右球摆出 */
+    35% { transform: rotate(32deg); }    /* 摆到最右侧 */
+    56% { transform: rotate(32deg); }    /* 在顶端停留 */
+
+    /* 右球摆回撞击 */
+    66% { transform: rotate(0deg); }     /* 回到中心 */
+    72% { transform: rotate(0deg); }     /* 撞击完成 */
+
+    /* 左球弹回期间右球静止 */
+    72%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes cradle-wobble-1 {
+    0%, 12% { transform: rotate(0deg); }
+    18% { transform: rotate(4deg); }     /* 被左球撞击 */
+    22% { transform: rotate(1deg); }
+    28% { transform: rotate(0deg); }
+    66%, 76% { transform: rotate(0deg); }
+    82% { transform: rotate(4deg); }     /* 被右球传回 */
+    88% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes cradle-wobble-3 {
+    0%, 28% { transform: rotate(0deg); }
+    34% { transform: rotate(-4deg); }    /* 动量传至右侧 */
+    40% { transform: rotate(0deg); }
+    66%, 82% { transform: rotate(0deg); }
+    88% { transform: rotate(-4deg); }
+    94% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes cradle-pulse {
+    0%, 16% { transform: scale(1); }
+    20% { transform: scale(0.85); }      /* 压缩 - 动量通过 */
+    24% { transform: scale(1); }
+    66%, 70% { transform: scale(1); }
+    74% { transform: scale(0.85); }      /* 再次压缩 */
+    78% { transform: scale(1); }
+    100% { transform: scale(1); }
 }
 
 /* ============================================================

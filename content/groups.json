@@ -3,5 +3,6 @@
     { "key": "mtr", "label": "快速入门", "icon": "" },
     { "key": "addon", "label": "附属模组", "icon": "" },
     { "key": "resourcepack", "label": "制作资源包", "icon": "" },
-    { "key": "mod", "label": "制作模组", "icon": "" }
+    { "key": "mod", "label": "制作模组", "icon": "" },
+    { "key": "helpus", "label": "Wiki需要你的帮助", "icon": "" }
 ]

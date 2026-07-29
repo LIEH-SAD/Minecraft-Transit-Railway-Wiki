@@ -1,4 +1,4 @@
-# 附属模组：**Nanbin Create Mod** 的使用
+# 附属模组：Nanbin Create Mod 的使用
 欸嘿！接下来由模组的开发者——**LIEH-SAD**亲自为您讲解吧。
 （这多少有点中二病）
 作为一个不太正经的MTR附属模组，Nanbin Create Mod（以下简称NCM）更是一个偏城建的模组。

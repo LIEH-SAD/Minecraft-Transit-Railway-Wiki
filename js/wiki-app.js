@@ -103,7 +103,7 @@ class WikiApp {
      */
     getCategoryInfo(category) {
         const found = this.groups.find(g => g.key === category);
-        return found || { key: 'other', label: '其他', icon: '📄' };
+        return found || { key: 'other', label: '其他', icon: '' };
     }
 
     /**
@@ -165,7 +165,7 @@ class WikiApp {
         }
 
         navList.innerHTML = navHtml;
-        pageList.innerHTML = pageHtml || '<div class="md-drawer__section"><span class="md-drawer__section-title">📄 页面</span></div>';
+        pageList.innerHTML = pageHtml || '<div class="md-drawer__section"><span class="md-drawer__section-title">页面</span></div>';
 
         // 更新底部计数
         const pageCount = document.getElementById('page-count');

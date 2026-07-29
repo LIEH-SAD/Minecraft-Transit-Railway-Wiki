@@ -112,5 +112,6 @@ dependencies {
 | Item | 物品类定义储存文件夹 |
 | BlockEntity.java | 方块渲染存储文件 |
 
+接下来，就要讲一下命名规则了。
 
 

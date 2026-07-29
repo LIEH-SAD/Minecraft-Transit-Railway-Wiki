@@ -4,6 +4,12 @@
     { "path": "server", "title": "加入Let's Play服务器",           "section": "pages", "category": "mtr" },
     { "path": "nanbin",  "title": "南滨创意",    "section": "pages", "category": "addon" },
     { "path": "resourcepack1",  "title": "创造资源包",    "section": "pages", "category": "resourcepack" },
+    { "path": "resourcepack2",  "title": "方块模型",    "section": "pages", "category": "resourcepack" },
     { "path": "pids1",  "title": "建立PIDS资源包",    "section": "pages", "category": "resourcepack" },
-    { "path": "build1",  "title": "搭建开发环境",    "section": "pages", "category": "mod" }
+    { "path": "ai",  "title": "AI在资源包中的应用",    "section": "pages", "category": "resourcepack" },
+    { "path": "build1",  "title": "搭建开发环境",    "section": "pages", "category": "mod" },
+    { "path": "build2",  "title": "培养命名规则",    "section": "pages", "category": "mod" },
+    { "path": "build3",  "title": "模组的入口",    "section": "pages", "category": "mod" },
+    { "path": "block1",  "title": "添加方块",    "section": "pages", "category": "mod" },
+    { "path": "helpus",  "title": "你的帮助",    "section": "pages", "category": "helpus" }
 ]
