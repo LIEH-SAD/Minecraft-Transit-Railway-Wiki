@@ -1,7 +1,31 @@
 # Nanbin JS 指示牌脚本 API 文档
 
 > 适用于 MTR 4.0.5 + Nanbin 模组的全局 JS 指示牌样式系统。
-> 脚本运行在 **GraalJS 24.2.1** 引擎中，支持现代 **ES2023** 语法（`const`/`let`、箭头函数、模板字符串、`padStart`、`includes` 等）。
+> 脚本运行在 **Nashorn 15.4** 引擎中（ES6 模式），支持 **部分 ES6** 语法（`const`/`let`、箭头函数、模板字符串、默认参数、`Map`/`Set` 等）。
+
+## 〇、脚本语法支持范围（Nashorn ES6 模式）
+
+为避免写脚本时踩坑，这里列出 Nashorn 15.4 在 `--language=es6` 模式下**支持/不支持**的常见语法与 API：
+
+| 语法 / API | 支持 | 说明 |
+|---|---|---|
+| `var` / `function` | ✅ | ES5 传统写法，完全兼容 |
+| `const` / `let` | ✅ | 块级作用域变量 |
+| 箭头函数 `(a) => a*2` | ✅ | |
+| 模板字符串 `` `a${1+2}b` `` | ✅ | |
+| 默认参数 `(a = 5)` | ✅ | |
+| `Map` / `Set` | ✅ | `new Map()`、`.get()`、`.set()` 等 |
+| 数组/对象字面量、`Math`、`Date` | ✅ | 标准 ES5/ES6 常用功能 |
+| `class` | ❌ | ES6 class 声明/表达式**未实现** |
+| 解构 `{a,b} = obj` / `[a,b] = arr` | ❌ | |
+| 展开运算符 `...args` | ❌ | |
+| `async` / `await` | ❌ | |
+| `String.prototype.includes` / `padStart` / `padEnd` | ❌ | ES2017 方法；可用 `indexOf` 等替代 |
+| `Object.assign` | ❌ | 可用 `for...in` 手工拷贝 |
+| `Number.EPSILON` | ❌ | |
+| 其它 ES2017+ 方法（`startsWith`/`endsWith`/`repeat`/`trimStart` 等） | ❌ | 用 ES5 等价写法替代 |
+
+> 提示：脚本先用 `var` + `function` 写最稳妥；需要字符串包含判断时用 `"abc".indexOf("b") >= 0` 代替 `includes`。
 
 ---
 
@@ -259,7 +283,4 @@ function execute(ctx, state, sign) {
 
 | 脚本 | 演示内容 |
 |------|----------|
-| `example_clock.js` | 时间显示、`getFormattedTime`、`centered()` |
-| `example_station_info.js` | 生命周期、线路色条、站名、时间 |
-| `example_multi_screen.js` | `getScreenType()` 分流：站台/线路/出口/自定义文本 四屏一体 |
 | `crt_station_entrance.js` | 站名显示、未选择提示 |
